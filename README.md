@@ -5,25 +5,19 @@
 
 ## Installation
 
-Unzip the `empathai_prototype.zip` file:
-
-```bash
-tar -xvf empathai_prototype.zip
-```
-
-Configure your OpenAI API Key as below:
-
-```bash
-export OPENAI_API_KEY=<your-openai-api-key>
-```
-
 Install the necessary dependencies using `pip` (You may use a `venv` for your setup):
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the app:
+## Configuring OpenAI API Key
+
+```bash
+export OPENAI_API_KEY=<your-openai-api-key>
+```
+
+## Run the app
 
 ```bash
 python main.py
