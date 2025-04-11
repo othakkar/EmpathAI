@@ -1,2 +1,32 @@
-# EmpathAI
-EmpathAI is a lightweight mental health chatbot prototype using GPT-4 and Flask, designed to simulate emotionally intelligent conversations for mental wellbeing. It includes features like emotional check-ins, journaling prompts, and crisis keyword detection. 
+## Prerequisites
+
+- Python 3.8+
+- OpenAI API Key
+
+## Installation
+
+Unzip the `empathai_prototype.zip` file:
+
+```bash
+tar -xvf empathai_prototype.zip
+```
+
+Configure your OpenAI API Key as below:
+
+```bash
+export OPENAI_API_KEY=<your-openai-api-key>
+```
+
+Install the necessary dependencies using `pip` (You may use a `venv` for your setup):
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the app:
+
+```bash
+python main.py
+```
+
+Then navigate to http://localhost:8501 in your browser.

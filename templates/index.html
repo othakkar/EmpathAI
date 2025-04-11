@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmpathAI</title>
+    <!-- Bootstrap CSS (Standard CDN, dark theme supported) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container-fluid h-100 d-flex flex-column">
+        <!-- Header -->
+        <header class="row py-3">
+            <div class="col-12 text-center">
+                <h1 class="display-5">
+                    <i class="fas fa-brain text-primary me-2"></i>
+                    EmpathAI
+                </h1>
+                <p class="text-muted lead">A safe space for emotional wellbeing</p>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="row flex-grow-1">
+            <div class="col-lg-8 col-md-10 mx-auto d-flex flex-column">
+                <!-- Chat Container -->
+                <div class="card flex-grow-1">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Chat Session</span>
+                        <button id="clearChat" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-trash-alt me-1"></i> Clear Chat
+                        </button>
+                    </div>
+                    <div class="card-body chat-container" id="chatMessages">
+                        <!-- Welcome message -->
+                        <div class="message-row assistant">
+                            <div class="message-bubble">
+                                <p>Welcome to EmpathAI! I'm here to provide a judgment-free zone where you can express your thoughts and feelings. How are you doing today?</p>
+                            </div>
+                        </div>
+                        <!-- Chat messages will be appended here -->
+                    </div>
+                    
+                    <!-- Preset Prompts -->
+                    <div class="card-footer p-2 border-top border-bottom preset-prompts-container">
+                        <p class="small text-muted mb-2">Suggested topics:</p>
+                        <div class="d-flex flex-wrap gap-2" id="presetPrompts">
+                            <!-- Preset prompts will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Input Area -->
+                    <div class="card-footer p-2">
+                        <form id="messageForm" class="d-flex">
+                            <input type="text" id="userInput" class="form-control" placeholder="Type your message here..." autocomplete="off">
+                            <button type="submit" class="btn btn-primary ms-2" id="sendButton">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="row py-3">
+            <div class="col-12 text-center">
+                <p class="small text-muted mb-0">
+                    <i class="fas fa-info-circle me-1"></i> EmpathAI: A safe place for anyone to explore emotions and mental wellbeing. Not a substitute for professional mental health care.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Crisis Alert Modal -->
+    <div class="modal fade" id="crisisModal" tabindex="-1" aria-labelledby="crisisModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="crisisModalLabel">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Important Support Information
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Many people go through difficult times, and it takes real strength to ask for help. If you're experiencing a crisis or having thoughts of self-harm, please reach out to one of these resources immediately:</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><strong>National Suicide Prevention Lifeline:</strong> 988 or 1-800-273-8255</li>
+                        <li class="list-group-item"><strong>Crisis Text Line:</strong> Text HOME to 741741</li>
+                        <li class="list-group-item"><strong>Veterans Crisis Line:</strong> 1-800-273-8255 (Press 1)</li>
+                        <li class="list-group-item"><strong>Emergency:</strong> Call 911 or go to your nearest emergency room</li>
+                    </ul>
+                    <p class="mb-0">Reaching out isn't weakness – it's a sign of courage. Trained professionals are available 24/7 to provide support without judgment.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner Template (hidden by default) -->
+    <template id="loadingTemplate">
+        <div class="message-row assistant">
+            <div class="message-bubble loading">
+                <div class="spinner-grow spinner-grow-sm text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="spinner-grow spinner-grow-sm text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="spinner-grow spinner-grow-sm text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>
